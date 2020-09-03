@@ -10,7 +10,7 @@ import scipy.sparse as sp
 
 from sklearn import cluster
 from sklearn.utils import check_random_state
-from sklearn.mixture import sample_gaussian
+#from sklearn.mixture import sample_gaussian
 
 import autograd.numpy as np
 from autograd import grad, value_and_grad
