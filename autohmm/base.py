@@ -5,7 +5,7 @@ import warnings
 
 from hmmlearn import _hmmc
 from hmmlearn.base import _BaseHMM, logsumexp
-
+from hmmlearn import ultis
 import autograd.numpy as np
 
 decoder_algorithms = frozenset(("viterbi", "map"))
@@ -194,13 +194,14 @@ class _BaseAUTOHMM(_BaseHMM):
             # so there is no reason to update our trans. matrix estimate
             if n_samples <= 1:
                 return
+            log_xi_sum = np.full((n_components, n_components), -np.inf)
 
-            lneta = np.zeros((n_samples - 1, n_components, n_components))
-            _hmmc._compute_lneta(n_samples, n_components, fwdlattice,
-                                 np.log(safe_transmat),
-                                 bwdlattice, framelogprob, lneta)
-
-            stats['trans'] += np.exp(logsumexp(lneta, axis=0))
+            _hmmc._compute_log_xi_sum(n_samples, n_components, fwdlattice,
+                                      utils.log_mask_zero(self.transmat_),
+                                      bwdlattice, framelogprob,
+                                      log_xi_sum)
+            
+            stats['trans'] += np.exp(log_xi_sum)
             # stats['trans'] = np.round(stats['trans'])
             # if np.sum(stats['trans']) != X.shape[0]-1:
             #     warnings.warn("transmat counts != n_samples", RuntimeWarning)
