@@ -5,7 +5,7 @@ import warnings
 
 from hmmlearn import _hmmc
 from hmmlearn.base import _BaseHMM, logsumexp
-from hmmlearn import ultis
+from hmmlearn import utils
 import autograd.numpy as np
 
 decoder_algorithms = frozenset(("viterbi", "map"))
